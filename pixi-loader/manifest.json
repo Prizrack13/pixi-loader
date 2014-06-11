@@ -1,0 +1,18 @@
+{
+    "manifest_version": 2,
+    "name" : "Pixi loader",
+    "version" : "1.0.4",
+    "author" : "Varanitsa Anatoliy",
+    "description" : "Pixi loader",
+    "content_scripts": [
+      {
+        "matches": [ "*://*/*" ],
+        "css": [ "pixi.min.css" ],
+        "js": [ "jquery-1.8.2.min.js", "pixi.min.js" ],
+        "run_at": "document_start"
+      }
+    ],
+    "icons" : {
+      "128": "pixi.png"
+    }
+}
