@@ -44,13 +44,16 @@
         });
 
         var mouseDown = false,
-            shiftDown = false;
+            shiftDown = false
+            ae, ah;
 
         if ($('body #pixiOverlay')) {
             dropZone.on('mousedown', function (event) {
                 mouseDown = true;
+                ae = localStorage.getItem("pixiPos").split('px')[0] - event.clientX;
+                ah = localStorage.getItem("pixiPos").split('px')[1] - event.clientY;
             });
-
+            
             dropZone.on('mousemove', function (event) {
                 if ($('#pixiOverlay').hasClass('hasItem') && mouseDown && shiftDown && $('#pixiOverlay').is(':visible')) {
                     moveBackground(event)
@@ -81,8 +84,8 @@
             winhig = $(window).height();
 
         function moveBackground(evt) {
-            var toLeft = evt.clientX;
-            var toTop = evt.clientY;
+            var toLeft = evt.clientX + ae;
+            var toTop = evt.clientY + ah;
             if (toLeft < winwid && toTop < winhig) {
                 dropZone.css('background-position', "" + toLeft + "px " + toTop + "px");
                 localStorage.setItem('pixiPos', "" + toLeft + "px " + toTop + "px");
@@ -108,7 +111,10 @@
                     opacity: [48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
                 };
 
-                console.log(keyCode)
+            if (dropZone.is(":visible") && [16, 37, 38, 39, 40, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 71, 80, 90].indexOf(keyCode) != -1) {
+                m.stopPropagation();
+                m.preventDefault()
+            }
 
             switch (keyCode) {
                 case arrow.left:
@@ -128,7 +134,8 @@
                     $('#pixiOverlay').css('background-position', '' + bpl + 'px ' + bpt + 'px');
                     break;
                 case arrow.grid:
-                    $('#pixiOverlay').toggleClass('pixiToggle');
+                    var activeObj = document.activeElement;
+                    if (m.altKey || (activeObj.tagName != "INPUT" && activeObj.tagName != "TEXTAREA" && document.activeElement.className != 'fc_editable' && document.activeElement.className != 'im_editable')) $('#pixiOverlay').toggleClass('pixiToggle');
                     break;
                 case arrow.zindex:
                     $('#pixiOverlay').toggleClass('lowZindex');
